@@ -1,0 +1,54 @@
+name: Update symposium venue
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  update-venue:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update IOU venue and Google Maps
+        shell: python
+        run: |
+          from pathlib import Path
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          css_old = '''    .venue-card p { color:var(--muted); }\n'''
+          css_new = '''    .venue-card p { color:var(--muted); }\n    .venue-address { margin:18px 0 22px; padding-top:18px; border-top:1px solid var(--line); }\n    .venue-address b { display:block; color:var(--ink); margin-bottom:4px; }\n    .venue-map { margin-top:24px; border:1px solid var(--line); background:#fff; overflow:hidden; }\n    .venue-map iframe { width:100%; height:360px; border:0; display:block; }\n    .map-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }\n'''
+          if '.venue-map iframe' not in s:
+              if css_old not in s:
+                  raise SystemExit('Venue CSS insertion point not found')
+              s = s.replace(css_old, css_new, 1)
+
+          venue_old = '''<section id="venue">\n  <div class="container venue-grid">\n    <div>\n      <p class="kicker">Venue</p>\n      <h2>University of Campinas<br>Campinas, Brazil</h2>\n      <p class="copy">The symposium will take place at the University of Campinas (UNICAMP), a major Brazilian center for neuroscience, neurology and neuroimaging research.</p>\n    </div>\n    <div class="venue-card">\n      <strong>Campinas, São Paulo</strong>\n      <p>April 14–16, 2027</p>\n      <p>Detailed venue and travel information coming soon.</p>\n    </div>\n  </div>\n</section>'''
+
+          venue_new = '''<section id="venue">\n  <div class="container">\n    <div class="venue-grid">\n      <div>\n        <p class="kicker">Venue</p>\n        <h2>IOU · University of Campinas<br>Campinas, Brazil</h2>\n        <p class="copy">The symposium will take place at the <strong>Institute of Otorhinolaryngology &amp; Head and Neck Surgery (IOU)</strong>, located on the main campus of the University of Campinas (UNICAMP) in Barão Geraldo.</p>\n        <div class="venue-address copy">\n          <b>Institute of Otorhinolaryngology &amp; Head and Neck Surgery (IOU)</b>\n          Av. Prefeito José Roberto Magalhães Teixeira, 150<br>\n          Cidade Universitária Zeferino Vaz · Barão Geraldo<br>\n          Campinas, São Paulo · Brazil\n        </div>\n        <div class="map-actions">\n          <a class="btn primary" href="https://share.google/s0RZWVNVZjExSSIXS" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>\n        </div>\n      </div>\n      <div class="venue-card">\n        <strong>IOU · UNICAMP</strong>\n        <p>April 14–16, 2027</p>\n        <p>Main symposium venue</p>\n        <p>Barão Geraldo · Campinas, São Paulo</p>\n      </div>\n    </div>\n    <div class="venue-map" aria-label="Map showing the IOU venue at UNICAMP">\n      <iframe\n        title="IOU at University of Campinas — symposium venue"\n        src="https://www.google.com/maps?q=Instituto%20de%20Otorrinolaringologia%20%26%20Cirurgia%20de%20Cabe%C3%A7a%20e%20Pesco%C3%A7o%20IOU%20UNICAMP%2C%20Av.%20Prefeito%20Jos%C3%A9%20Roberto%20Magalh%C3%A3es%20Teixeira%2C%20150%2C%20Campinas%2C%20SP%2C%20Brazil&output=embed"\n        loading="lazy"\n        referrerpolicy="no-referrer-when-downgrade"\n        allowfullscreen>\n      </iframe>\n    </div>\n  </div>\n</section>'''
+
+          if 'IOU · University of Campinas' not in s:
+              if venue_old not in s:
+                  raise SystemExit('Existing venue block not found')
+              s = s.replace(venue_old, venue_new, 1)
+
+          p.write_text(s, encoding='utf-8')
+
+      - name: Commit venue update
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "No changes required"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Update venue to IOU and add Google Maps"
+          git push
