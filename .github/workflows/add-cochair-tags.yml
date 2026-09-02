@@ -1,0 +1,56 @@
+name: Add Co-Chair Tags
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  add-cochair-tags:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add Co-Chair badges
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          css_old = '''    .steering-member strong { display:block; font-size:15px; line-height:1.25; }
+    .steering-member span { display:block; color:var(--muted); font-size:12px; line-height:1.35; margin-top:6px; }'''
+          css_new = '''    .steering-member strong { display:block; font-size:15px; line-height:1.25; }
+    .role-tag { display:inline-block; margin-left:6px; padding:2px 6px; border-radius:999px; background:var(--accent); color:var(--primary-dark); font-size:9px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; vertical-align:middle; }
+    .steering-member span:not(.role-tag) { display:block; color:var(--muted); font-size:12px; line-height:1.35; margin-top:6px; }'''
+          if css_old not in s:
+              raise SystemExit('Steering CSS block not found')
+          s = s.replace(css_old, css_new, 1)
+
+          thiago_old = '<strong>Thiago Junqueira Ribeiro de Rezende</strong>'
+          thiago_new = '<strong>Thiago Junqueira Ribeiro de Rezende <span class="role-tag">Co-Chair</span></strong>'
+          ian_old = '<strong>Ian H. Harding</strong>'
+          ian_new = '<strong>Ian H. Harding <span class="role-tag">Co-Chair</span></strong>'
+
+          if thiago_old not in s or ian_old not in s:
+              raise SystemExit('Co-Chair names not found')
+          s = s.replace(thiago_old, thiago_new, 1)
+          s = s.replace(ian_old, ian_new, 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Commit update and remove workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Add Co-Chair tags to Steering Committee"
+          git push
+          git rm .github/workflows/add-cochair-tags.yml
+          git commit -m "Remove one-time Co-Chair workflow"
+          git push
