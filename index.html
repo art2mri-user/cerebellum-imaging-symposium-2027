@@ -46,6 +46,14 @@
     .btn.primary { background: var(--primary); color:white; }
     .btn.primary:hover { background:var(--primary-dark); }
     .btn.secondary { border:1px solid var(--line); background:white; }
+    .btn.interest { background:#f0a202; color:#14213d; border:1px solid #f0a202; box-shadow:0 8px 22px rgba(240,162,2,.22); }
+    .btn.interest:hover { background:#d99100; border-color:#d99100; }
+    .interest-band { padding:26px 0; background:var(--ink); color:#fff; }
+    .interest-wrap { display:flex; align-items:center; justify-content:space-between; gap:28px; }
+    .interest-band .kicker { color:#9de2e7; margin-bottom:5px; }
+    .interest-band h2 { font-family:Georgia, 'Times New Roman', serif; font-size:clamp(25px,3vw,36px); margin:0 0 5px; letter-spacing:-.025em; }
+    .interest-band p { margin:0; color:#d8e1e8; }
+    .interest-band .btn { flex:0 0 auto; }
     .hero-card { background:white; border:1px solid var(--line); border-top:5px solid var(--primary); padding:26px; box-shadow:0 18px 45px rgba(20,33,61,.07); }
     .hero-card h3 { margin:0 0 16px; font-size:17px; }
     .hero-card ol { margin:0; padding-left:22px; }
@@ -132,6 +140,7 @@
       .committee { grid-template-columns:1fr; }
       .row { grid-template-columns:1fr; gap:4px; }
       .footer-wrap { flex-direction:column; align-items:flex-start; }
+      .interest-wrap { flex-direction:column; align-items:flex-start; }
       .sponsor-grid { grid-template-columns:1fr; }
     }
     @media(max-width:560px){
@@ -169,6 +178,7 @@
         <div class="fact"><strong>University of Campinas</strong><span>Campinas, Brazil</span></div>
       </div>
       <div class="actions">
+        <a class="btn interest" href="https://forms.gle/rCNTC6VUyXUfFH4u8" target="_blank" rel="noopener noreferrer">Expression of Interest</a>
         <a class="btn primary" href="#program">Preliminary program</a>
         <a class="btn secondary" href="#speakers">Keynote speakers</a>
       </div>
@@ -184,6 +194,17 @@
         <li>Clinical-trial biomarkers &amp; clinical utility</li>
       </ol>
     </aside>
+  </div>
+</section>
+
+<section class="interest-band" aria-label="Expression of Interest">
+  <div class="container interest-wrap">
+    <div>
+      <p class="kicker">Expression of Interest now open</p>
+      <h2>Interested in joining us in Campinas?</h2>
+      <p>Complete the Expression of Interest form for the Cerebellum Neuroimaging Symposium 2027.</p>
+    </div>
+    <a class="btn interest" href="https://forms.gle/rCNTC6VUyXUfFH4u8" target="_blank" rel="noopener noreferrer">Complete the form →</a>
   </div>
 </section>
 
