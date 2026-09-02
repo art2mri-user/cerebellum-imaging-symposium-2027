@@ -14,36 +14,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Add Co-Chair badges
+      - name: Patch Steering Committee
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
+          import base64
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-
-          css_old = '''    .steering-member strong { display:block; font-size:15px; line-height:1.25; }
-    .steering-member span { display:block; color:var(--muted); font-size:12px; line-height:1.35; margin-top:6px; }'''
-          css_new = '''    .steering-member strong { display:block; font-size:15px; line-height:1.25; }
-    .role-tag { display:inline-block; margin-left:6px; padding:2px 6px; border-radius:999px; background:var(--accent); color:var(--primary-dark); font-size:9px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; vertical-align:middle; }
-    .steering-member span:not(.role-tag) { display:block; color:var(--muted); font-size:12px; line-height:1.35; margin-top:6px; }'''
-          if css_old not in s:
-              raise SystemExit('Steering CSS block not found')
-          s = s.replace(css_old, css_new, 1)
-
-          thiago_old = '<strong>Thiago Junqueira Ribeiro de Rezende</strong>'
-          thiago_new = '<strong>Thiago Junqueira Ribeiro de Rezende <span class="role-tag">Co-Chair</span></strong>'
-          ian_old = '<strong>Ian H. Harding</strong>'
-          ian_new = '<strong>Ian H. Harding <span class="role-tag">Co-Chair</span></strong>'
-
-          if thiago_old not in s or ian_old not in s:
-              raise SystemExit('Co-Chair names not found')
-          s = s.replace(thiago_old, thiago_new, 1)
-          s = s.replace(ian_old, ian_new, 1)
-          p.write_text(s, encoding='utf-8')
+          def d(x): return base64.b64decode(x).decode('utf-8')
+          replacements = [
+            ('ICAgIC5zdGVlcmluZy1tZW1iZXIgc3Ryb25nIHsgZGlzcGxheTpibG9jazsgZm9udC1zaXplOjE1cHg7IGxpbmUtaGVpZ2h0OjEuMjU7IH0KICAgIC5zdGVlcmluZy1tZW1iZXIgc3BhbiB7IGRpc3BsYXk6YmxvY2s7IGNvbG9yOnZhcigtLW11dGVkKTsgZm9udC1zaXplOjEycHg7IGxpbmUtaGVpZ2h0OjEuMzU7IG1hcmdpbi10b3A6NnB4OyB9','ICAgIC5zdGVlcmluZy1tZW1iZXIgc3Ryb25nIHsgZGlzcGxheTpibG9jazsgZm9udC1zaXplOjE1cHg7IGxpbmUtaGVpZ2h0OjEuMjU7IH0KICAgIC5yb2xlLXRhZyB7IGRpc3BsYXk6aW5saW5lLWJsb2NrOyBtYXJnaW4tbGVmdDo2cHg7IHBhZGRpbmc6MnB4IDZweDsgYm9yZGVyLXJhZGl1czo5OTlweDsgYmFja2dyb3VuZDp2YXIoLS1hY2NlbnQpOyBjb2xvcjp2YXIoLS1wcmltYXJ5LWRhcmspOyBmb250LXNpemU6OXB4OyBmb250LXdlaWdodDo4MDA7IGxldHRlci1zcGFjaW5nOi4wNmVtOyB0ZXh0LXRyYW5zZm9ybTp1cHBlcmNhc2U7IHZlcnRpY2FsLWFsaWduOm1pZGRsZTsgfQogICAgLnN0ZWVyaW5nLW1lbWJlciBzcGFuOm5vdCgucm9sZS10YWcpIHsgZGlzcGxheTpibG9jazsgY29sb3I6dmFyKC0tbXV0ZWQpOyBmb250LXNpemU6MTJweDsgbGluZS1oZWlnaHQ6MS4zNTsgbWFyZ2luLXRvcDo2cHg7IH0='),
+            ('PHN0cm9uZz5UaGlhZ28gSnVucXVlaXJhIFJpYmVpcm8gZGUgUmV6ZW5kZTwvc3Ryb25nPg==','PHN0cm9uZz5UaGlhZ28gSnVucXVlaXJhIFJpYmVpcm8gZGUgUmV6ZW5kZSA8c3BhbiBjbGFzcz0icm9sZS10YWciPkNvLUNoYWlyPC9zcGFuPjwvc3Ryb25nPg=='),
+            ('PHN0cm9uZz5JYW4gSC4gSGFyZGluZzwvc3Ryb25nPg==','PHN0cm9uZz5JYW4gSC4gSGFyZGluZyA8c3BhbiBjbGFzcz0icm9sZS10YWciPkNvLUNoYWlyPC9zcGFuPjwvc3Ryb25nPg==')
+          ]
+          for a,b in replacements:
+              old,new=d(a),d(b)
+              if old not in s:
+                  raise SystemExit('Expected block not found')
+              s=s.replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
           PY
 
-      - name: Commit update and remove workflow
+      - name: Commit and clean up
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
