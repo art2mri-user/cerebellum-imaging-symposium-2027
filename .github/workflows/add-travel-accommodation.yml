@@ -1,0 +1,135 @@
+name: Add Travel and Accommodation
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  update-travel:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add accommodation and transport guidance
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          css_anchor = '''    .coming-panel { border:1px solid var(--line); background:#fff; padding:30px; }
+    .coming-panel h3 { font-family:Georgia,serif; font-size:26px; margin:0 0 10px; }
+    .coming-panel p { color:var(--muted); margin:0 0 20px; }
+    .coming-panel .meta { display:block; color:var(--primary); font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; margin-bottom:8px; }
+'''
+          extra_css = css_anchor + '''
+    .travel-intro { max-width:820px; color:var(--muted); font-size:17px; margin:16px 0 34px; }
+    .travel-subhead { font-family:Georgia,serif; font-size:30px; margin:42px 0 20px; letter-spacing:-.02em; }
+    .hotel-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+    .hotel-card { border:1px solid var(--line); background:#fff; padding:24px; display:flex; flex-direction:column; min-height:290px; }
+    .hotel-card .hotel-tag { display:inline-flex; align-self:flex-start; padding:4px 8px; border-radius:999px; background:var(--accent); color:var(--primary-dark); font-size:10px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; margin-bottom:16px; }
+    .hotel-card h3 { font-family:Georgia,serif; font-size:24px; line-height:1.08; margin:0 0 10px; }
+    .hotel-card p { color:var(--muted); font-size:14px; margin:0 0 12px; }
+    .hotel-card .hotel-address { font-size:13px; color:var(--ink); margin-top:auto; padding-top:12px; border-top:1px solid var(--line); }
+    .hotel-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
+    .hotel-actions .btn { min-height:40px; padding:0 13px; font-size:12px; }
+    .transport-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
+    .transport-card { border:1px solid var(--line); background:var(--soft); padding:24px; }
+    .transport-card .transport-label { display:block; color:var(--primary); font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px; }
+    .transport-card h3 { font-size:19px; margin:0 0 8px; }
+    .transport-card p { color:var(--muted); font-size:14px; margin:0; }
+    .travel-note { margin-top:20px; color:var(--muted); font-size:13px; }
+'''
+          if css_anchor in s and '.hotel-grid {' not in s:
+              s = s.replace(css_anchor, extra_css, 1)
+
+          s = s.replace('''      .important-grid { grid-template-columns:repeat(2,1fr); }
+      .hero-grid, .split, .venue-grid { grid-template-columns:1fr; gap:42px; }''', '''      .important-grid { grid-template-columns:repeat(2,1fr); }
+      .hotel-grid { grid-template-columns:1fr; }
+      .transport-grid { grid-template-columns:1fr; }
+      .hero-grid, .split, .venue-grid { grid-template-columns:1fr; gap:42px; }''', 1)
+
+          start = s.index('<section id="travel">')
+          end = s.index('<section id="venue"', start)
+          new = '''<section id="travel">
+  <div class="container">
+    <p class="kicker">Getting to Campinas</p>
+    <h2>Travel &amp; Accommodation</h2>
+    <p class="travel-intro">The symposium will be held on the University of Campinas (UNICAMP) campus in Barão Geraldo. The accommodations below are suggested options for participants; room blocks or special symposium rates, if available, will be announced separately.</p>
+
+    <h3 class="travel-subhead">Suggested accommodations</h3>
+    <div class="hotel-grid">
+      <article class="hotel-card">
+        <span class="hotel-tag">On campus</span>
+        <h3>Casa do Professor Visitante (CPV)</h3>
+        <p>Located inside the UNICAMP campus, CPV is the most convenient option for participants who prefer to stay close to the symposium activities.</p>
+        <div class="hotel-address">Av. Érico Veríssimo, 1251 · Barão Geraldo · Campinas, SP · 13083-851</div>
+        <div class="hotel-actions">
+          <a class="btn primary" href="https://www.funcamp.unicamp.br/cpv/" target="_blank" rel="noopener noreferrer">Hotel website</a>
+          <a class="btn secondary" href="https://www.google.com/maps/search/?api=1&amp;query=Casa+do+Professor+Visitante+UNICAMP" target="_blank" rel="noopener noreferrer">Google Maps</a>
+        </div>
+      </article>
+      <article class="hotel-card">
+        <span class="hotel-tag">Barão Geraldo</span>
+        <h3>Matiz Barão Geraldo Express Hotel</h3>
+        <p>A practical option in Barão Geraldo, approximately 2 km from UNICAMP, with easy access to the campus and local restaurants and services.</p>
+        <div class="hotel-address">Av. Albino José Barbosa de Oliveira, 1700 · Barão Geraldo · Campinas, SP</div>
+        <div class="hotel-actions">
+          <a class="btn primary" href="https://book.omnibees.com/chain/2250/hotel/1265?currencyId=16&amp;lang=pt-BR" target="_blank" rel="noopener noreferrer">Hotel website</a>
+          <a class="btn secondary" href="https://www.google.com/maps/search/?api=1&amp;query=Matiz+Bar%C3%A3o+Geraldo+Express+Hotel+Campinas" target="_blank" rel="noopener noreferrer">Google Maps</a>
+        </div>
+      </article>
+      <article class="hotel-card">
+        <span class="hotel-tag">Campinas</span>
+        <h3>Rio Hotel by Bourbon Campinas</h3>
+        <p>A comfortable hotel in Jardim Santa Genebra, near Parque D. Pedro, with convenient road access to UNICAMP and Viracopos Airport.</p>
+        <div class="hotel-address">R. Estácio de Sá, 2136 · Jardim Santa Genebra · Campinas, SP · 13080-010</div>
+        <div class="hotel-actions">
+          <a class="btn primary" href="https://www.bourbon.com.br/hoteis-e-resorts/rio-hotel-by-bourbon-campinas" target="_blank" rel="noopener noreferrer">Hotel website</a>
+          <a class="btn secondary" href="https://www.google.com/maps/search/?api=1&amp;query=Rio+Hotel+by+Bourbon+Campinas" target="_blank" rel="noopener noreferrer">Google Maps</a>
+        </div>
+      </article>
+    </div>
+
+    <h3 class="travel-subhead">Transportation</h3>
+    <div class="transport-grid">
+      <article class="transport-card"><span class="transport-label">Recommended airport</span><h3>Viracopos International Airport (VCP)</h3><p>Viracopos is the most convenient airport for Campinas. Taxis and app-based ride services are available at the airport and are the simplest option for reaching Barão Geraldo and UNICAMP.</p></article>
+      <article class="transport-card"><span class="transport-label">International connections</span><h3>São Paulo–Guarulhos Airport (GRU)</h3><p>GRU offers a wider range of international flights. Direct intercity coach services connect GRU with Campinas; from the Campinas Bus Station, participants can continue to Barão Geraldo by taxi, app-based ride or local bus.</p></article>
+      <article class="transport-card"><span class="transport-label">Public transport</span><h3>Campinas to UNICAMP</h3><p>Public bus connections serve UNICAMP from central Campinas and the Campinas Bus Station. Current routes and timetables should be checked shortly before travel.</p></article>
+      <article class="transport-card"><span class="transport-label">On campus</span><h3>UNICAMP Internal Shuttle</h3><p>UNICAMP operates free internal shuttle buses connecting major points across the campus. No registration is required; routes and real-time information are available through the university mobility services.</p></article>
+    </div>
+    <div class="hotel-actions" style="margin-top:22px">
+      <a class="btn primary" href="https://www.prefeitura.unicamp.br/produto/circular-interno/" target="_blank" rel="noopener noreferrer">UNICAMP internal transport</a>
+      <a class="btn secondary" href="https://portal.ifi.unicamp.br/a-instituicao/como-chegar" target="_blank" rel="noopener noreferrer">How to reach UNICAMP</a>
+      <a class="btn secondary" href="https://www.viracopos.com/pt_br/" target="_blank" rel="noopener noreferrer">Viracopos Airport</a>
+    </div>
+    <p class="travel-note">Additional transportation arrangements for symposium participants, if offered, will be announced closer to the meeting.</p>
+  </div>
+</section>
+
+'''
+          s = s[:start] + new + s[end:]
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Commit travel update
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Add recommended accommodations and transportation guidance"
+          git push
+
+      - name: Remove one-time workflow
+        shell: bash
+        run: |
+          git pull --rebase
+          git rm .github/workflows/add-travel-accommodation.yml
+          git commit -m "Remove one-time travel update workflow"
+          git push
