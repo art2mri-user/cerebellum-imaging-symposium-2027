@@ -13,110 +13,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Add accommodation and transport guidance
+      - name: Update travel section
         shell: bash
+        env:
+          TRAVEL_B64: "PHNlY3Rpb24gaWQ9InRyYXZlbCI+CiAgPGRpdiBjbGFzcz0iY29udGFpbmVyIj4KICAgIDxwIGNsYXNzPSJraWNrZXIiPkdldHRpbmcgdG8gQ2FtcGluYXM8L3A+CiAgICA8aDI+VHJhdmVsICZhbXA7IEFjY29tbW9kYXRpb248L2gyPgogICAgPHAgY2xhc3M9InRyYXZlbC1pbnRybyI+VGhlIHN5bXBvc2l1bSB3aWxsIGJlIGhlbGQgb24gdGhlIFVuaXZlcnNpdHkgb2YgQ2FtcGluYXMgKFVOSUNBTVApIGNhbXB1cyBpbiBCYXLDo28gR2VyYWxkby4gVGhlIGFjY29tbW9kYXRpb25zIGJlbG93IGFyZSBzdWdnZXN0ZWQgb3B0aW9ucyBmb3IgcGFydGljaXBhbnRzOyByb29tIGJsb2NrcyBvciBzcGVjaWFsIHN5bXBvc2l1bSByYXRlcywgaWYgYXZhaWxhYmxlLCB3aWxsIGJlIGFubm91bmNlZCBzZXBhcmF0ZWx5LjwvcD4KCiAgICA8aDMgY2xhc3M9InRyYXZlbC1zdWJoZWFkIj5TdWdnZXN0ZWQgYWNjb21tb2RhdGlvbnM8L2gzPgogICAgPGRpdiBjbGFzcz0iaG90ZWwtZ3JpZCI+CiAgICAgIDxhcnRpY2xlIGNsYXNzPSJob3RlbC1jYXJkIj4KICAgICAgICA8c3BhbiBjbGFzcz0iaG90ZWwtdGFnIj5PbiBjYW1wdXM8L3NwYW4+CiAgICAgICAgPGgzPkNhc2EgZG8gUHJvZmVzc29yIFZpc2l0YW50ZSAoQ1BWKTwvaDM+CiAgICAgICAgPHA+TG9jYXRlZCBpbnNpZGUgdGhlIFVOSUNBTVAgY2FtcHVzLCBDUFYgaXMgdGhlIG1vc3QgY29udmVuaWVudCBvcHRpb24gZm9yIHBhcnRpY2lwYW50cyB3aG8gcHJlZmVyIHRvIHN0YXkgY2xvc2UgdG8gdGhlIHN5bXBvc2l1bSBhY3Rpdml0aWVzLjwvcD4KICAgICAgICA8ZGl2IGNsYXNzPSJob3RlbC1hZGRyZXNzIj5Bdi4gw4lyaWNvIFZlcsOtc3NpbW8sIDEyNTEgwrcgQmFyw6NvIEdlcmFsZG8gwrcgQ2FtcGluYXMsIFNQIMK3IDEzMDgzLTg1MTwvZGl2PgogICAgICAgIDxkaXYgY2xhc3M9ImhvdGVsLWFjdGlvbnMiPgogICAgICAgICAgPGEgY2xhc3M9ImJ0biBwcmltYXJ5IiBocmVmPSJodHRwczovL3d3dy5mdW5jYW1wLnVuaWNhbXAuYnIvY3B2LyIgdGFyZ2V0PSJfYmxhbmsiIHJlbD0ibm9vcGVuZXIgbm9yZWZlcnJlciI+SG90ZWwgd2Vic2l0ZTwvYT4KICAgICAgICAgIDxhIGNsYXNzPSJidG4gc2Vjb25kYXJ5IiBocmVmPSJodHRwczovL3d3dy5nb29nbGUuY29tL21hcHMvc2VhcmNoLz9hcGk9MSZxdWVyeT1DYXNhK2RvK1Byb2Zlc3NvcitWaXNpdGFudGUrVU5JQ0FNUCIgdGFyZ2V0PSJfYmxhbmsiIHJlbD0ibm9vcGVuZXIgbm9yZWZlcnJlciI+R29vZ2xlIE1hcHM8L2E+CiAgICAgICAgPC9kaXY+CiAgICAgIDwvYXJ0aWNsZT4KCiAgICAgIDxhcnRpY2xlIGNsYXNzPSJob3RlbC1jYXJkIj4KICAgICAgICA8c3BhbiBjbGFzcz0iaG90ZWwtdGFnIj5CYXLDo28gR2VyYWxkbzwvc3Bhbj4KICAgICAgICA8aDM+TWF0aXogQmFyw6NvIEdlcmFsZG8gRXhwcmVzcyBIb3RlbDwvaDM+CiAgICAgICAgPHA+QSBwcmFjdGljYWwgb3B0aW9uIGluIEJhcsOjbyBHZXJhbGRvLCBhcHByb3hpbWF0ZWx5IDIga20gZnJvbSBVTklDQU1QLCB3aXRoIGVhc3kgYWNjZXNzIHRvIHRoZSBjYW1wdXMgYW5kIGxvY2FsIHJlc3RhdXJhbnRzIGFuZCBzZXJ2aWNlcy48L3A+CiAgICAgICAgPGRpdiBjbGFzcz0iaG90ZWwtYWRkcmVzcyI+QXYuIEFsYmlubyBKb3PDqSBCYXJib3NhIGRlIE9saXZlaXJhLCAxNzAwIMK3IEJhcsOjbyBHZXJhbGRvIMK3IENhbXBpbmFzLCBTUDwvZGl2PgogICAgICAgIDxkaXYgY2xhc3M9ImhvdGVsLWFjdGlvbnMiPgogICAgICAgICAgPGEgY2xhc3M9ImJ0biBwcmltYXJ5IiBocmVmPSJodHRwczovL2Jvb2sub21uaWJlZXMuY29tL2NoYWluLzIyNTAvaG90ZWwvMTI2NT9jdXJyZW5jeUlkPTE2Jmxhbmc9cHQtQlIiIHRhcmdldD0iX2JsYW5rIiByZWw9Im5vb3BlbmVyIG5vcmVmZXJyZXIiPkhvdGVsIHdlYnNpdGU8L2E+CiAgICAgICAgICA8YSBjbGFzcz0iYnRuIHNlY29uZGFyeSIgaHJlZj0iaHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS9tYXBzL3NlYXJjaC8/YXBpPTEmcXVlcnk9TWF0aXorQmFyJUMzJUEzbytHZXJhbGRvK0V4cHJlc3MrSG90ZWwrQ2FtcGluYXMiIHRhcmdldD0iX2JsYW5rIiByZWw9Im5vb3BlbmVyIG5vcmVmZXJyZXIiPkdvb2dsZSBNYXBzPC9hPgogICAgICAgIDwvZGl2PgogICAgICA8L2FydGljbGU+CgogICAgICA8YXJ0aWNsZSBjbGFzcz0iaG90ZWwtY2FyZCI+CiAgICAgICAgPHNwYW4gY2xhc3M9ImhvdGVsLXRhZyI+Q2FtcGluYXM8L3NwYW4+CiAgICAgICAgPGgzPlJpbyBIb3RlbCBieSBCb3VyYm9uIENhbXBpbmFzPC9oMz4KICAgICAgICA8cD5BIGNvbWZvcnRhYmxlIGhvdGVsIGluIEphcmRpbSBTYW50YSBHZW5lYnJhLCBuZWFyIFBhcnF1ZSBELiBQZWRybywgd2l0aCBjb252ZW5pZW50IHJvYWQgYWNjZXNzIHRvIFVOSUNBTVAgYW5kIFZpcmFjb3BvcyBBaXJwb3J0LjwvcD4KICAgICAgICA8ZGl2IGNsYXNzPSJob3RlbC1hZGRyZXNzIj5SLiBFc3TDoWNpbyBkZSBTw6EsIDIxMzYgwrcgSmFyZGltIFNhbnRhIEdlbmVicmEgwrcgQ2FtcGluYXMsIFNQIMK3IDEzMDgwLTAxMDwvZGl2PgogICAgICAgIDxkaXYgY2xhc3M9ImhvdGVsLWFjdGlvbnMiPgogICAgICAgICAgPGEgY2xhc3M9ImJ0biBwcmltYXJ5IiBocmVmPSJodHRwczovL3d3dy5ib3VyYm9uLmNvbS5ici9ob3RlaXMtZS1yZXNvcnRzL3Jpby1ob3RlbC1ieS1ib3VyYm9uLWNhbXBpbmFzIiB0YXJnZXQ9Il9ibGFuayIgcmVsPSJub29wZW5lciBub3JlZmVycmVyIj5Ib3RlbCB3ZWJzaXRlPC9hPgogICAgICAgICAgPGEgY2xhc3M9ImJ0biBzZWNvbmRhcnkiIGhyZWY9Imh0dHBzOi8vd3d3Lmdvb2dsZS5jb20vbWFwcy9zZWFyY2gvP2FwaT0xJnF1ZXJ5PVJpbytIb3RlbCtieStCb3VyYm9uK0NhbXBpbmFzIiB0YXJnZXQ9Il9ibGFuayIgcmVsPSJub29wZW5lciBub3JlZmVycmVyIj5Hb29nbGUgTWFwczwvYT4KICAgICAgICA8L2Rpdj4KICAgICAgPC9hcnRpY2xlPgogICAgPC9kaXY+CgogICAgPGgzIGNsYXNzPSJ0cmF2ZWwtc3ViaGVhZCI+VHJhbnNwb3J0YXRpb248L2gzPgogICAgPGRpdiBjbGFzcz0idHJhbnNwb3J0LWdyaWQiPgogICAgICA8YXJ0aWNsZSBjbGFzcz0idHJhbnNwb3J0LWNhcmQiPgogICAgICAgIDxzcGFuIGNsYXNzPSJ0cmFuc3BvcnQtbGFiZWwiPlJlY29tbWVuZGVkIGFpcnBvcnQ8L3NwYW4+CiAgICAgICAgPGgzPlZpcmFjb3BvcyBJbnRlcm5hdGlvbmFsIEFpcnBvcnQgKFZDUCk8L2gzPgogICAgICAgIDxwPlZpcmFjb3BvcyBpcyB0aGUgbW9zdCBjb252ZW5pZW50IGFpcnBvcnQgZm9yIENhbXBpbmFzLiBUYXhpcyBhbmQgYXBwLWJhc2VkIHJpZGUgc2VydmljZXMgYXJlIGF2YWlsYWJsZSBhdCB0aGUgYWlycG9ydCBhbmQgYXJlIHRoZSBzaW1wbGVzdCBvcHRpb24gZm9yIHJlYWNoaW5nIEJhcsOjbyBHZXJhbGRvIGFuZCBVTklDQU1QLjwvcD4KICAgICAgPC9hcnRpY2xlPgogICAgICA8YXJ0aWNsZSBjbGFzcz0idHJhbnNwb3J0LWNhcmQiPgogICAgICAgIDxzcGFuIGNsYXNzPSJ0cmFuc3BvcnQtbGFiZWwiPkludGVybmF0aW9uYWwgY29ubmVjdGlvbnM8L3NwYW4+CiAgICAgICAgPGgzPlPDo28gUGF1bG/igJNHdWFydWxob3MgQWlycG9ydCAoR1JVKTwvaDM+CiAgICAgICAgPHA+R1JVIG9mZmVycyBhIHdpZGVyIHJhbmdlIG9mIGludGVybmF0aW9uYWwgZmxpZ2h0cy4gRGlyZWN0IGludGVyY2l0eSBjb2FjaCBzZXJ2aWNlcyBjb25uZWN0IEdSVSB3aXRoIENhbXBpbmFzOyBmcm9tIHRoZSBDYW1waW5hcyBCdXMgU3RhdGlvbiwgcGFydGljaXBhbnRzIGNhbiBjb250aW51ZSB0byBCYXLDo28gR2VyYWxkbyBieSB0YXhpLCBhcHAtYmFzZWQgcmlkZSBvciBsb2NhbCBidXMuPC9wPgogICAgICA8L2FydGljbGU+CiAgICAgIDxhcnRpY2xlIGNsYXNzPSJ0cmFuc3BvcnQtY2FyZCI+CiAgICAgICAgPHNwYW4gY2xhc3M9InRyYW5zcG9ydC1sYWJlbCI+UHVibGljIHRyYW5zcG9ydDwvc3Bhbj4KICAgICAgICA8aDM+Q2FtcGluYXMgdG8gVU5JQ0FNUDwvaDM+CiAgICAgICAgPHA+UHVibGljIGJ1cyBjb25uZWN0aW9ucyBzZXJ2ZSBVTklDQU1QIGZyb20gY2VudHJhbCBDYW1waW5hcyBhbmQgdGhlIENhbXBpbmFzIEJ1cyBTdGF0aW9uLiBDdXJyZW50IHJvdXRlcyBhbmQgdGltZXRhYmxlcyBzaG91bGQgYmUgY2hlY2tlZCBzaG9ydGx5IGJlZm9yZSB0cmF2ZWwuPC9wPgogICAgICA8L2FydGljbGU+CiAgICAgIDxhcnRpY2xlIGNsYXNzPSJ0cmFuc3BvcnQtY2FyZCI+CiAgICAgICAgPHNwYW4gY2xhc3M9InRyYW5zcG9ydC1sYWJlbCI+T24gY2FtcHVzPC9zcGFuPgogICAgICAgIDxoMz5VTklDQU1QIEludGVybmFsIFNodXR0bGU8L2gzPgogICAgICAgIDxwPlVOSUNBTVAgb3BlcmF0ZXMgZnJlZSBpbnRlcm5hbCBzaHV0dGxlIGJ1c2VzIGNvbm5lY3RpbmcgbWFqb3IgcG9pbnRzIGFjcm9zcyB0aGUgY2FtcHVzLiBObyByZWdpc3RyYXRpb24gaXMgcmVxdWlyZWQ7IHJvdXRlcyBhbmQgcmVhbC10aW1lIGluZm9ybWF0aW9uIGFyZSBhdmFpbGFibGUgdGhyb3VnaCB0aGUgdW5pdmVyc2l0eSBtb2JpbGl0eSBzZXJ2aWNlcy48L3A+CiAgICAgIDwvYXJ0aWNsZT4KICAgIDwvZGl2PgogICAgPGRpdiBjbGFzcz0iaG90ZWwtYWN0aW9ucyIgc3R5bGU9Im1hcmdpbi10b3A6MjJweCI+CiAgICAgIDxhIGNsYXNzPSJidG4gcHJpbWFyeSIgaHJlZj0iaHR0cHM6Ly93d3cucHJlZmVpdHVyYS51bmljYW1wLmJyL3Byb2R1dG8vY2lyY3VsYXItaW50ZXJuby8iIHRhcmdldD0iX2JsYW5rIiByZWw9Im5vb3BlbmVyIG5vcmVmZXJyZXIiPlVOSUNBTVAgaW50ZXJuYWwgdHJhbnNwb3J0PC9hPgogICAgICA8YSBjbGFzcz0iYnRuIHNlY29uZGFyeSIgaHJlZj0iaHR0cHM6Ly9wb3J0YWwuaWZpLnVuaWNhbXAuYnIvYS1pbnN0aXR1aWNhby9jb21vLWNoZWdhciIgdGFyZ2V0PSJfYmxhbmsiIHJlbD0ibm9vcGVuZXIgbm9yZWZlcnJlciI+SG93IHRvIHJlYWNoIFVOSUNBTVA8L2E+CiAgICAgIDxhIGNsYXNzPSJidG4gc2Vjb25kYXJ5IiBocmVmPSJodHRwczovL3d3dy52aXJhY29wb3MuY29tL3B0X2JyLyIgdGFyZ2V0PSJfYmxhbmsiIHJlbD0ibm9vcGVuZXIgbm9yZWZlcnJlciI+VmlyYWNvcG9zIEFpcnBvcnQ8L2E+CiAgICA8L2Rpdj4KICAgIDxwIGNsYXNzPSJ0cmF2ZWwtbm90ZSI+QWRkaXRpb25hbCB0cmFuc3BvcnRhdGlvbiBhcnJhbmdlbWVudHMgZm9yIHN5bXBvc2l1bSBwYXJ0aWNpcGFudHMsIGlmIG9mZmVyZWQsIHdpbGwgYmUgYW5ub3VuY2VkIGNsb3NlciB0byB0aGUgbWVldGluZy48L3A+CiAgPC9kaXY+Cjwvc2VjdGlvbj4KCg=="
+          CSS_B64: "ICAgIC50cmF2ZWwtaW50cm8geyBtYXgtd2lkdGg6ODIwcHg7IGNvbG9yOnZhcigtLW11dGVkKTsgZm9udC1zaXplOjE3cHg7IG1hcmdpbjoxNnB4IDAgMzRweDsgfQogICAgLnRyYXZlbC1zdWJoZWFkIHsgZm9udC1mYW1pbHk6R2VvcmdpYSxzZXJpZjsgZm9udC1zaXplOjMwcHg7IG1hcmdpbjo0MnB4IDAgMjBweDsgbGV0dGVyLXNwYWNpbmc6LS4wMmVtOyB9CiAgICAuaG90ZWwtZ3JpZCB7IGRpc3BsYXk6Z3JpZDsgZ3JpZC10ZW1wbGF0ZS1jb2x1bW5zOnJlcGVhdCgzLDFmcik7IGdhcDoxOHB4OyB9CiAgICAuaG90ZWwtY2FyZCB7IGJvcmRlcjoxcHggc29saWQgdmFyKC0tbGluZSk7IGJhY2tncm91bmQ6I2ZmZjsgcGFkZGluZzoyNHB4OyBkaXNwbGF5OmZsZXg7IGZsZXgtZGlyZWN0aW9uOmNvbHVtbjsgbWluLWhlaWdodDoyOTBweDsgfQogICAgLmhvdGVsLWNhcmQgLmhvdGVsLXRhZyB7IGRpc3BsYXk6aW5saW5lLWZsZXg7IGFsaWduLXNlbGY6ZmxleC1zdGFydDsgcGFkZGluZzo0cHggOHB4OyBib3JkZXItcmFkaXVzOjk5OXB4OyBiYWNrZ3JvdW5kOnZhcigtLWFjY2VudCk7IGNvbG9yOnZhcigtLXByaW1hcnktZGFyayk7IGZvbnQtc2l6ZToxMHB4OyBmb250LXdlaWdodDo4MDA7IGxldHRlci1zcGFjaW5nOi4wN2VtOyB0ZXh0LXRyYW5zZm9ybTp1cHBlcmNhc2U7IG1hcmdpbi1ib3R0b206MTZweDsgfQogICAgLmhvdGVsLWNhcmQgaDMgeyBmb250LWZhbWlseTpHZW9yZ2lhLHNlcmlmOyBmb250LXNpemU6MjRweDsgbGluZS1oZWlnaHQ6MS4wODsgbWFyZ2luOjAgMCAxMHB4OyB9CiAgICAuaG90ZWwtY2FyZCBwIHsgY29sb3I6dmFyKC0tbXV0ZWQpOyBmb250LXNpemU6MTRweDsgbWFyZ2luOjAgMCAxMnB4OyB9CiAgICAuaG90ZWwtY2FyZCAuaG90ZWwtYWRkcmVzcyB7IGZvbnQtc2l6ZToxM3B4OyBjb2xvcjp2YXIoLS1pbmspOyBtYXJnaW4tdG9wOmF1dG87IHBhZGRpbmctdG9wOjEycHg7IGJvcmRlci10b3A6MXB4IHNvbGlkIHZhcigtLWxpbmUpOyB9CiAgICAuaG90ZWwtYWN0aW9ucyB7IGRpc3BsYXk6ZmxleDsgZ2FwOjhweDsgZmxleC13cmFwOndyYXA7IG1hcmdpbi10b3A6MTZweDsgfQogICAgLmhvdGVsLWFjdGlvbnMgLmJ0biB7IG1pbi1oZWlnaHQ6NDBweDsgcGFkZGluZzowIDEzcHg7IGZvbnQtc2l6ZToxMnB4OyB9CiAgICAudHJhbnNwb3J0LWdyaWQgeyBkaXNwbGF5OmdyaWQ7IGdyaWQtdGVtcGxhdGUtY29sdW1uczpyZXBlYXQoMiwxZnIpOyBnYXA6MThweDsgfQogICAgLnRyYW5zcG9ydC1jYXJkIHsgYm9yZGVyOjFweCBzb2xpZCB2YXIoLS1saW5lKTsgYmFja2dyb3VuZDp2YXIoLS1zb2Z0KTsgcGFkZGluZzoyNHB4OyB9CiAgICAudHJhbnNwb3J0LWNhcmQgLnRyYW5zcG9ydC1sYWJlbCB7IGRpc3BsYXk6YmxvY2s7IGNvbG9yOnZhcigtLXByaW1hcnkpOyBmb250LXNpemU6MTFweDsgZm9udC13ZWlnaHQ6ODAwOyBsZXR0ZXItc3BhY2luZzouMWVtOyB0ZXh0LXRyYW5zZm9ybTp1cHBlcmNhc2U7IG1hcmdpbi1ib3R0b206OHB4OyB9CiAgICAudHJhbnNwb3J0LWNhcmQgaDMgeyBmb250LXNpemU6MTlweDsgbWFyZ2luOjAgMCA4cHg7IH0KICAgIC50cmFuc3BvcnQtY2FyZCBwIHsgY29sb3I6dmFyKC0tbXV0ZWQpOyBmb250LXNpemU6MTRweDsgbWFyZ2luOjA7IH0KICAgIC50cmF2ZWwtbm90ZSB7IG1hcmdpbi10b3A6MjBweDsgY29sb3I6dmFyKC0tbXV0ZWQpOyBmb250LXNpemU6MTNweDsgfQ=="
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import os, base64
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-
-          css_anchor = '''    .coming-panel { border:1px solid var(--line); background:#fff; padding:30px; }
-    .coming-panel h3 { font-family:Georgia,serif; font-size:26px; margin:0 0 10px; }
-    .coming-panel p { color:var(--muted); margin:0 0 20px; }
-    .coming-panel .meta { display:block; color:var(--primary); font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; margin-bottom:8px; }
-'''
-          extra_css = css_anchor + '''
-    .travel-intro { max-width:820px; color:var(--muted); font-size:17px; margin:16px 0 34px; }
-    .travel-subhead { font-family:Georgia,serif; font-size:30px; margin:42px 0 20px; letter-spacing:-.02em; }
-    .hotel-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
-    .hotel-card { border:1px solid var(--line); background:#fff; padding:24px; display:flex; flex-direction:column; min-height:290px; }
-    .hotel-card .hotel-tag { display:inline-flex; align-self:flex-start; padding:4px 8px; border-radius:999px; background:var(--accent); color:var(--primary-dark); font-size:10px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; margin-bottom:16px; }
-    .hotel-card h3 { font-family:Georgia,serif; font-size:24px; line-height:1.08; margin:0 0 10px; }
-    .hotel-card p { color:var(--muted); font-size:14px; margin:0 0 12px; }
-    .hotel-card .hotel-address { font-size:13px; color:var(--ink); margin-top:auto; padding-top:12px; border-top:1px solid var(--line); }
-    .hotel-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
-    .hotel-actions .btn { min-height:40px; padding:0 13px; font-size:12px; }
-    .transport-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
-    .transport-card { border:1px solid var(--line); background:var(--soft); padding:24px; }
-    .transport-card .transport-label { display:block; color:var(--primary); font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px; }
-    .transport-card h3 { font-size:19px; margin:0 0 8px; }
-    .transport-card p { color:var(--muted); font-size:14px; margin:0; }
-    .travel-note { margin-top:20px; color:var(--muted); font-size:13px; }
-'''
-          if css_anchor in s and '.hotel-grid {' not in s:
-              s = s.replace(css_anchor, extra_css, 1)
-
-          s = s.replace('''      .important-grid { grid-template-columns:repeat(2,1fr); }
-      .hero-grid, .split, .venue-grid { grid-template-columns:1fr; gap:42px; }''', '''      .important-grid { grid-template-columns:repeat(2,1fr); }
-      .hotel-grid { grid-template-columns:1fr; }
-      .transport-grid { grid-template-columns:1fr; }
-      .hero-grid, .split, .venue-grid { grid-template-columns:1fr; gap:42px; }''', 1)
-
+          css = base64.b64decode(os.environ['CSS_B64']).decode('utf-8')
+          travel = base64.b64decode(os.environ['TRAVEL_B64']).decode('utf-8')
+          if '.travel-intro {' not in s:
+              s = s.replace('    .workshop { background:var(--accent); }', css + '\n\n    @media(max-width:980px){ .hotel-grid { grid-template-columns:1fr; } .transport-grid { grid-template-columns:1fr; } }\n\n    .workshop { background:var(--accent); }', 1)
           start = s.index('<section id="travel">')
           end = s.index('<section id="venue"', start)
-          new = '''<section id="travel">
-  <div class="container">
-    <p class="kicker">Getting to Campinas</p>
-    <h2>Travel &amp; Accommodation</h2>
-    <p class="travel-intro">The symposium will be held on the University of Campinas (UNICAMP) campus in Barão Geraldo. The accommodations below are suggested options for participants; room blocks or special symposium rates, if available, will be announced separately.</p>
-
-    <h3 class="travel-subhead">Suggested accommodations</h3>
-    <div class="hotel-grid">
-      <article class="hotel-card">
-        <span class="hotel-tag">On campus</span>
-        <h3>Casa do Professor Visitante (CPV)</h3>
-        <p>Located inside the UNICAMP campus, CPV is the most convenient option for participants who prefer to stay close to the symposium activities.</p>
-        <div class="hotel-address">Av. Érico Veríssimo, 1251 · Barão Geraldo · Campinas, SP · 13083-851</div>
-        <div class="hotel-actions">
-          <a class="btn primary" href="https://www.funcamp.unicamp.br/cpv/" target="_blank" rel="noopener noreferrer">Hotel website</a>
-          <a class="btn secondary" href="https://www.google.com/maps/search/?api=1&amp;query=Casa+do+Professor+Visitante+UNICAMP" target="_blank" rel="noopener noreferrer">Google Maps</a>
-        </div>
-      </article>
-      <article class="hotel-card">
-        <span class="hotel-tag">Barão Geraldo</span>
-        <h3>Matiz Barão Geraldo Express Hotel</h3>
-        <p>A practical option in Barão Geraldo, approximately 2 km from UNICAMP, with easy access to the campus and local restaurants and services.</p>
-        <div class="hotel-address">Av. Albino José Barbosa de Oliveira, 1700 · Barão Geraldo · Campinas, SP</div>
-        <div class="hotel-actions">
-          <a class="btn primary" href="https://book.omnibees.com/chain/2250/hotel/1265?currencyId=16&amp;lang=pt-BR" target="_blank" rel="noopener noreferrer">Hotel website</a>
-          <a class="btn secondary" href="https://www.google.com/maps/search/?api=1&amp;query=Matiz+Bar%C3%A3o+Geraldo+Express+Hotel+Campinas" target="_blank" rel="noopener noreferrer">Google Maps</a>
-        </div>
-      </article>
-      <article class="hotel-card">
-        <span class="hotel-tag">Campinas</span>
-        <h3>Rio Hotel by Bourbon Campinas</h3>
-        <p>A comfortable hotel in Jardim Santa Genebra, near Parque D. Pedro, with convenient road access to UNICAMP and Viracopos Airport.</p>
-        <div class="hotel-address">R. Estácio de Sá, 2136 · Jardim Santa Genebra · Campinas, SP · 13080-010</div>
-        <div class="hotel-actions">
-          <a class="btn primary" href="https://www.bourbon.com.br/hoteis-e-resorts/rio-hotel-by-bourbon-campinas" target="_blank" rel="noopener noreferrer">Hotel website</a>
-          <a class="btn secondary" href="https://www.google.com/maps/search/?api=1&amp;query=Rio+Hotel+by+Bourbon+Campinas" target="_blank" rel="noopener noreferrer">Google Maps</a>
-        </div>
-      </article>
-    </div>
-
-    <h3 class="travel-subhead">Transportation</h3>
-    <div class="transport-grid">
-      <article class="transport-card"><span class="transport-label">Recommended airport</span><h3>Viracopos International Airport (VCP)</h3><p>Viracopos is the most convenient airport for Campinas. Taxis and app-based ride services are available at the airport and are the simplest option for reaching Barão Geraldo and UNICAMP.</p></article>
-      <article class="transport-card"><span class="transport-label">International connections</span><h3>São Paulo–Guarulhos Airport (GRU)</h3><p>GRU offers a wider range of international flights. Direct intercity coach services connect GRU with Campinas; from the Campinas Bus Station, participants can continue to Barão Geraldo by taxi, app-based ride or local bus.</p></article>
-      <article class="transport-card"><span class="transport-label">Public transport</span><h3>Campinas to UNICAMP</h3><p>Public bus connections serve UNICAMP from central Campinas and the Campinas Bus Station. Current routes and timetables should be checked shortly before travel.</p></article>
-      <article class="transport-card"><span class="transport-label">On campus</span><h3>UNICAMP Internal Shuttle</h3><p>UNICAMP operates free internal shuttle buses connecting major points across the campus. No registration is required; routes and real-time information are available through the university mobility services.</p></article>
-    </div>
-    <div class="hotel-actions" style="margin-top:22px">
-      <a class="btn primary" href="https://www.prefeitura.unicamp.br/produto/circular-interno/" target="_blank" rel="noopener noreferrer">UNICAMP internal transport</a>
-      <a class="btn secondary" href="https://portal.ifi.unicamp.br/a-instituicao/como-chegar" target="_blank" rel="noopener noreferrer">How to reach UNICAMP</a>
-      <a class="btn secondary" href="https://www.viracopos.com/pt_br/" target="_blank" rel="noopener noreferrer">Viracopos Airport</a>
-    </div>
-    <p class="travel-note">Additional transportation arrangements for symposium participants, if offered, will be announced closer to the meeting.</p>
-  </div>
-</section>
-
-'''
-          s = s[:start] + new + s[end:]
+          s = s[:start] + travel + s[end:]
           p.write_text(s, encoding='utf-8')
           PY
-
       - name: Commit travel update
         shell: bash
         run: |
@@ -125,7 +41,6 @@ jobs:
           git add index.html
           git commit -m "Add recommended accommodations and transportation guidance"
           git push
-
       - name: Remove one-time workflow
         shell: bash
         run: |
