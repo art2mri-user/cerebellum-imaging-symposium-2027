@@ -19,99 +19,21 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-
+          import base64
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-
-          old_css = '''    .committee { display:grid; grid-template-columns:repeat(2,1fr); border-top:1px solid var(--line); }
-    .committee div { padding:18px 10px; border-bottom:1px solid var(--line); display:flex; flex-direction:column; }
-    .committee strong { font-size:15px; }
-    .committee span { color:var(--muted); font-size:13px; }'''
-
-          new_css = '''    .steering-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:26px; align-items:start; }
-    .steering-member { text-align:center; padding:4px; }
-    .steering-photo { width:112px; height:112px; border-radius:50%; object-fit:cover; object-position:center top; display:block; margin:0 auto 14px; border:3px solid #fff; box-shadow:0 0 0 1px var(--line), 0 7px 18px rgba(20,33,61,.06); background:#eef3f6; }
-    .steering-member strong { display:block; font-size:15px; line-height:1.25; }
-    .steering-member span { display:block; color:var(--muted); font-size:12px; line-height:1.35; margin-top:6px; }'''
-
-          if old_css not in s:
-              raise SystemExit('Expected committee CSS block not found')
-          s = s.replace(old_css, new_css)
-
-          old_980 = '''    @media(max-width:980px){
-      .speaker-grid { grid-template-columns: repeat(2,1fr); }
-      .hero-grid, .split, .venue-grid { grid-template-columns:1fr; gap:42px; }
-    }'''
-          new_980 = '''    @media(max-width:980px){
-      .speaker-grid { grid-template-columns: repeat(2,1fr); }
-      .steering-grid { grid-template-columns:repeat(3,1fr); }
-      .hero-grid, .split, .venue-grid { grid-template-columns:1fr; gap:42px; }
-    }'''
-          if old_980 not in s:
-              raise SystemExit('Expected 980px media block not found')
-          s = s.replace(old_980, new_980)
-
-          old_760 = '''      .committee { grid-template-columns:1fr; }'''
-          new_760 = '''      .steering-grid { grid-template-columns:repeat(2,1fr); gap:24px 16px; }'''
-          if old_760 not in s:
-              raise SystemExit('Expected committee responsive rule not found')
-          s = s.replace(old_760, new_760)
-
-          old_section = '''<section class="soft" id="committee">
-  <div class="container">
-    <div class="heading">
-      <p class="kicker">Organizing committee</p>
-      <h2>Scientific leadership</h2>
-    </div>
-    <div class="committee">
-      <div><strong>Thiago Junqueira Ribeiro de Rezende</strong><span>University of São Paulo &amp; University of Campinas, Brazil</span></div>
-      <div><strong>Ian H. Harding</strong><span>Queensland Institute of Medical Research, Australia</span></div>
-      <div><strong>Marcondes Cavalcante França Jr</strong><span>University of Campinas, Brazil</span></div>
-      <div><strong>Pierre-Gilles Henry</strong><span>University of Minnesota, USA</span></div>
-      <div><strong>Sheeba Anteraper</strong><span>UT Southwestern, USA</span></div>
-    </div>
-  </div>
-</section>'''
-
-          new_section = '''<section class="soft" id="committee">
-  <div class="container">
-    <div class="heading">
-      <p class="kicker">Scientific leadership</p>
-      <h2>Steering Committee</h2>
-    </div>
-    <div class="steering-grid">
-      <article class="steering-member">
-        <img class="steering-photo" src="assets/thiago-rezende.jpg" alt="Portrait of Thiago Junqueira Ribeiro de Rezende">
-        <strong>Thiago Junqueira Ribeiro de Rezende</strong>
-        <span>University of São Paulo &amp; University of Campinas, Brazil</span>
-      </article>
-      <article class="steering-member">
-        <img class="steering-photo" src="assets/ian-harding.jpg" alt="Portrait of Ian H. Harding">
-        <strong>Ian H. Harding</strong>
-        <span>Queensland Institute of Medical Research, Australia</span>
-      </article>
-      <article class="steering-member">
-        <img class="steering-photo" src="assets/marcondes-franca.jpg" alt="Portrait of Marcondes Cavalcante França Jr">
-        <strong>Marcondes Cavalcante França Jr</strong>
-        <span>University of Campinas, Brazil</span>
-      </article>
-      <article class="steering-member">
-        <img class="steering-photo" src="assets/pierre-gilles-henry.jpg" alt="Portrait of Pierre-Gilles Henry">
-        <strong>Pierre-Gilles Henry</strong>
-        <span>University of Minnesota, USA</span>
-      </article>
-      <article class="steering-member">
-        <img class="steering-photo" src="assets/sheeba-anteraper.jpg" alt="Portrait of Sheeba Anteraper">
-        <strong>Sheeba Anteraper</strong>
-        <span>UT Southwestern, USA</span>
-      </article>
-    </div>
-  </div>
-</section>'''
-
-          if old_section not in s:
-              raise SystemExit('Expected committee HTML section not found')
-          s = s.replace(old_section, new_section)
+          def dec(x): return base64.b64decode(x).decode('utf-8')
+          replacements = [
+              ('ICAgIC5jb21taXR0ZWUgeyBkaXNwbGF5OmdyaWQ7IGdyaWQtdGVtcGxhdGUtY29sdW1uczpyZXBlYXQoMiwxZnIpOyBib3JkZXItdG9wOjFweCBzb2xpZCB2YXIoLS1saW5lKTsgfQogICAgLmNvbW1pdHRlZSBkaXYgeyBwYWRkaW5nOjE4cHggMTBweDsgYm9yZGVyLWJvdHRvbToxcHggc29saWQgdmFyKC0tbGluZSk7IGRpc3BsYXk6ZmxleDsgZmxleC1kaXJlY3Rpb246Y29sdW1uOyB9CiAgICAuY29tbWl0dGVlIHN0cm9uZyB7IGZvbnQtc2l6ZToxNXB4OyB9CiAgICAuY29tbWl0dGVlIHNwYW4geyBjb2xvcjp2YXIoLS1tdXRlZCk7IGZvbnQtc2l6ZToxM3B4OyB9', 'ICAgIC5zdGVlcmluZy1ncmlkIHsgZGlzcGxheTpncmlkOyBncmlkLXRlbXBsYXRlLWNvbHVtbnM6cmVwZWF0KDUsMWZyKTsgZ2FwOjI2cHg7IGFsaWduLWl0ZW1zOnN0YXJ0OyB9CiAgICAuc3RlZXJpbmctbWVtYmVyIHsgdGV4dC1hbGlnbjpjZW50ZXI7IHBhZGRpbmc6NHB4OyB9CiAgICAuc3RlZXJpbmctcGhvdG8geyB3aWR0aDoxMTJweDsgaGVpZ2h0OjExMnB4OyBib3JkZXItcmFkaXVzOjUwJTsgb2JqZWN0LWZpdDpjb3Zlcjsgb2JqZWN0LXBvc2l0aW9uOmNlbnRlciB0b3A7IGRpc3BsYXk6YmxvY2s7IG1hcmdpbjowIGF1dG8gMTRweDsgYm9yZGVyOjNweCBzb2xpZCAjZmZmOyBib3gtc2hhZG93OjAgMCAwIDFweCB2YXIoLS1saW5lKSwgMCA3cHggMThweCByZ2JhKDIwLDMzLDYxLC4wNik7IGJhY2tncm91bmQ6I2VlZjNmNjsgfQogICAgLnN0ZWVyaW5nLW1lbWJlciBzdHJvbmcgeyBkaXNwbGF5OmJsb2NrOyBmb250LXNpemU6MTVweDsgbGluZS1oZWlnaHQ6MS4yNTsgfQogICAgLnN0ZWVyaW5nLW1lbWJlciBzcGFuIHsgZGlzcGxheTpibG9jazsgY29sb3I6dmFyKC0tbXV0ZWQpOyBmb250LXNpemU6MTJweDsgbGluZS1oZWlnaHQ6MS4zNTsgbWFyZ2luLXRvcDo2cHg7IH0='),
+              ('ICAgIEBtZWRpYShtYXgtd2lkdGg6OTgwcHgpewogICAgICAuc3BlYWtlci1ncmlkIHsgZ3JpZC10ZW1wbGF0ZS1jb2x1bW5zOiByZXBlYXQoMiwxZnIpOyB9CiAgICAgIC5oZXJvLWdyaWQsIC5zcGxpdCwgLnZlbnVlLWdyaWQgeyBncmlkLXRlbXBsYXRlLWNvbHVtbnM6MWZyOyBnYXA6NDJweDsgfQogICAgfQ==', 'ICAgIEBtZWRpYShtYXgtd2lkdGg6OTgwcHgpewogICAgICAuc3BlYWtlci1ncmlkIHsgZ3JpZC10ZW1wbGF0ZS1jb2x1bW5zOiByZXBlYXQoMiwxZnIpOyB9CiAgICAgIC5zdGVlcmluZy1ncmlkIHsgZ3JpZC10ZW1wbGF0ZS1jb2x1bW5zOnJlcGVhdCgzLDFmcik7IH0KICAgICAgLmhlcm8tZ3JpZCwgLnNwbGl0LCAudmVudWUtZ3JpZCB7IGdyaWQtdGVtcGxhdGUtY29sdW1uczoxZnI7IGdhcDo0MnB4OyB9CiAgICB9'),
+              ('ICAgICAgLmNvbW1pdHRlZSB7IGdyaWQtdGVtcGxhdGUtY29sdW1uczoxZnI7IH0=', 'ICAgICAgLnN0ZWVyaW5nLWdyaWQgeyBncmlkLXRlbXBsYXRlLWNvbHVtbnM6cmVwZWF0KDIsMWZyKTsgZ2FwOjI0cHggMTZweDsgfQ=='),
+              ('PHNlY3Rpb24gY2xhc3M9InNvZnQiIGlkPSJjb21taXR0ZWUiPgogIDxkaXYgY2xhc3M9ImNvbnRhaW5lciI+CiAgICA8ZGl2IGNsYXNzPSJoZWFkaW5nIj4KICAgICAgPHAgY2xhc3M9ImtpY2tlciI+T3JnYW5pemluZyBjb21taXR0ZWU8L3A+CiAgICAgIDxoMj5TY2llbnRpZmljIGxlYWRlcnNoaXA8L2gyPgogICAgPC9kaXY+CiAgICA8ZGl2IGNsYXNzPSJjb21taXR0ZWUiPgogICAgICA8ZGl2PjxzdHJvbmc+VGhpYWdvIEp1bnF1ZWlyYSBSaWJlaXJvIGRlIFJlemVuZGU8L3N0cm9uZz48c3Bhbj5Vbml2ZXJzaXR5IG9mIFPDo28gUGF1bG8gJmFtcDsgVW5pdmVyc2l0eSBvZiBDYW1waW5hcywgQnJhemlsPC9zcGFuPjwvZGl2PgogICAgICA8ZGl2PjxzdHJvbmc+SWFuIEguIEhhcmRpbmc8L3N0cm9uZz48c3Bhbj5RdWVlbnNsYW5kIEluc3RpdHV0ZSBvZiBNZWRpY2FsIFJlc2VhcmNoLCBBdXN0cmFsaWE8L3NwYW4+PC9kaXY+CiAgICAgIDxkaXY+PHN0cm9uZz5NYXJjb25kZXMgQ2F2YWxjYW50ZSBGcmFuw6dhIEpyPC9zdHJvbmc+PHNwYW4+VW5pdmVyc2l0eSBvZiBDYW1waW5hcywgQnJhemlsPC9zcGFuPjwvZGl2PgogICAgICA8ZGl2PjxzdHJvbmc+UGllcnJlLUdpbGxlcyBIZW5yeTwvc3Ryb25nPjxzcGFuPlVuaXZlcnNpdHkgb2YgTWlubmVzb3RhLCBVU0E8L3NwYW4+PC9kaXY+CiAgICAgIDxkaXY+PHN0cm9uZz5TaGVlYmEgQW50ZXJhcGVyPC9zdHJvbmc+PHNwYW4+VVQgU291dGh3ZXN0ZXJuLCBVU0E8L3NwYW4+PC9kaXY+CiAgICA8L2Rpdj4KICA8L2Rpdj4KPC9zZWN0aW9uPg==', 'PHNlY3Rpb24gY2xhc3M9InNvZnQiIGlkPSJjb21taXR0ZWUiPgogIDxkaXYgY2xhc3M9ImNvbnRhaW5lciI+CiAgICA8ZGl2IGNsYXNzPSJoZWFkaW5nIj4KICAgICAgPHAgY2xhc3M9ImtpY2tlciI+U2NpZW50aWZpYyBsZWFkZXJzaGlwPC9wPgogICAgICA8aDI+U3RlZXJpbmcgQ29tbWl0dGVlPC9oMj4KICAgIDwvZGl2PgogICAgPGRpdiBjbGFzcz0ic3RlZXJpbmctZ3JpZCI+CiAgICAgIDxhcnRpY2xlIGNsYXNzPSJzdGVlcmluZy1tZW1iZXIiPgogICAgICAgIDxpbWcgY2xhc3M9InN0ZWVyaW5nLXBob3RvIiBzcmM9ImFzc2V0cy90aGlhZ28tcmV6ZW5kZS5qcGciIGFsdD0iUG9ydHJhaXQgb2YgVGhpYWdvIEp1bnF1ZWlyYSBSaWJlaXJvIGRlIFJlemVuZGUiPgogICAgICAgIDxzdHJvbmc+VGhpYWdvIEp1bnF1ZWlyYSBSaWJlaXJvIGRlIFJlemVuZGU8L3N0cm9uZz4KICAgICAgICA8c3Bhbj5Vbml2ZXJzaXR5IG9mIFPDo28gUGF1bG8gJmFtcDsgVW5pdmVyc2l0eSBvZiBDYW1waW5hcywgQnJhemlsPC9zcGFuPgogICAgICA8L2FydGljbGU+CiAgICAgIDxhcnRpY2xlIGNsYXNzPSJzdGVlcmluZy1tZW1iZXIiPgogICAgICAgIDxpbWcgY2xhc3M9InN0ZWVyaW5nLXBob3RvIiBzcmM9ImFzc2V0cy9pYW4taGFyZGluZy5qcGciIGFsdD0iUG9ydHJhaXQgb2YgSWFuIEguIEhhcmRpbmciPgogICAgICAgIDxzdHJvbmc+SWFuIEguIEhhcmRpbmc8L3N0cm9uZz4KICAgICAgICA8c3Bhbj5RdWVlbnNsYW5kIEluc3RpdHV0ZSBvZiBNZWRpY2FsIFJlc2VhcmNoLCBBdXN0cmFsaWE8L3NwYW4+CiAgICAgIDwvYXJ0aWNsZT4KICAgICAgPGFydGljbGUgY2xhc3M9InN0ZWVyaW5nLW1lbWJlciI+CiAgICAgICAgPGltZyBjbGFzcz0ic3RlZXJpbmctcGhvdG8iIHNyYz0iYXNzZXRzL21hcmNvbmRlcy1mcmFuY2EuanBnIiBhbHQ9IlBvcnRyYWl0IG9mIE1hcmNvbmRlcyBDYXZhbGNhbnRlIEZyYW7Dp2EgSnIiPgogICAgICAgIDxzdHJvbmc+TWFyY29uZGVzIENhdmFsY2FudGUgRnJhbsOnYSBKcjwvc3Ryb25nPgogICAgICAgIDxzcGFuPlVuaXZlcnNpdHkgb2YgQ2FtcGluYXMsIEJyYXppbDwvc3Bhbj4KICAgICAgPC9hcnRpY2xlPgogICAgICA8YXJ0aWNsZSBjbGFzcz0ic3RlZXJpbmctbWVtYmVyIj4KICAgICAgICA8aW1nIGNsYXNzPSJzdGVlcmluZy1waG90byIgc3JjPSJhc3NldHMvcGllcnJlLWdpbGxlcy1oZW5yeS5qcGciIGFsdD0iUG9ydHJhaXQgb2YgUGllcnJlLUdpbGxlcyBIZW5yeSI+CiAgICAgICAgPHN0cm9uZz5QaWVycmUtR2lsbGVzIEhlbnJ5PC9zdHJvbmc+CiAgICAgICAgPHNwYW4+VW5pdmVyc2l0eSBvZiBNaW5uZXNvdGEsIFVTQTwvc3Bhbj4KICAgICAgPC9hcnRpY2xlPgogICAgICA8YXJ0aWNsZSBjbGFzcz0ic3RlZXJpbmctbWVtYmVyIj4KICAgICAgICA8aW1nIGNsYXNzPSJzdGVlcmluZy1waG90byIgc3JjPSJhc3NldHMvc2hlZWJhLWFudGVyYXBlci5qcGciIGFsdD0iUG9ydHJhaXQgb2YgU2hlZWJhIEFudGVyYXBlciI+CiAgICAgICAgPHN0cm9uZz5TaGVlYmEgQW50ZXJhcGVyPC9zdHJvbmc+CiAgICAgICAgPHNwYW4+VVQgU291dGh3ZXN0ZXJuLCBVU0E8L3NwYW4+CiAgICAgIDwvYXJ0aWNsZT4KICAgIDwvZGl2PgogIDwvZGl2Pgo8L3NlY3Rpb24+')
+          ]
+          for old_b64, new_b64 in replacements:
+              old, new = dec(old_b64), dec(new_b64)
+              if old not in s:
+                  raise SystemExit('Expected source block not found')
+              s = s.replace(old, new, 1)
           p.write_text(s, encoding='utf-8')
           PY
 
