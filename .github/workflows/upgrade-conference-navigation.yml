@@ -3,13 +3,14 @@ name: Upgrade conference navigation
 on:
   push:
     branches: [main]
+    paths:
+      - '.github/workflows/upgrade-conference-navigation.yml'
 
 permissions:
   contents: write
 
 jobs:
   upgrade-site:
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -44,11 +45,6 @@ jobs:
     .date-card .status.open { background:#fff0c7; color:#875c00; }
     .date-card strong { font-size:17px; margin-bottom:6px; }
     .date-card span { color:var(--muted); font-size:14px; margin-top:auto; }
-    .info-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:22px; }
-    .info-card { border:1px solid var(--line); background:#fff; padding:28px; }
-    .info-card h3 { font-family:Georgia,serif; font-size:26px; margin:0 0 10px; }
-    .info-card p { color:var(--muted); margin:0 0 20px; }
-    .info-card .mini-label { color:var(--primary); font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; margin-bottom:9px; }
 
 '''
           if anchor_css not in s:
@@ -213,7 +209,6 @@ jobs:
       .speaker-grid { grid-template-columns: repeat(2,1fr); }
       .steering-grid { grid-template-columns:repeat(3,1fr); }
       .important-grid { grid-template-columns:repeat(2,1fr); }
-      .info-grid { grid-template-columns:1fr; }
       .hero-grid, .split, .venue-grid { grid-template-columns:1fr; gap:42px; }
     }'''
           if old_980 not in s:
