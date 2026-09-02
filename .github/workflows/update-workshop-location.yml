@@ -1,0 +1,80 @@
+name: Update workshop location
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  update-workshop:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update hands-on MRI workshop location
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old = '''<section id="workshop" class="workshop">
+  <div class="container split">
+    <div>
+      <p class="kicker">Pre-symposium training</p>
+      <h2>Hands-on cerebellar MRI workshop</h2>
+    </div>
+    <div class="copy">
+      <p>A pre-symposium hands-on course at the University of Campinas will focus on MRI acquisition and processing and is designed especially for early-career researchers.</p>
+      <p><strong>Workshop format and registration details will be announced.</strong></p>
+    </div>
+  </div>
+</section>'''
+          new = '''<section id="workshop" class="workshop">
+  <div class="container">
+    <div class="split">
+      <div>
+        <p class="kicker">Pre-symposium training</p>
+        <h2>Hands-on cerebellar MRI workshop</h2>
+      </div>
+      <div class="copy">
+        <p>A pre-symposium hands-on course will focus on MRI acquisition and processing and is designed especially for early-career researchers.</p>
+        <p>The workshop will take place at the <strong>Hospital de Clínicas da UNICAMP (HC)</strong>, on the University of Campinas campus.</p>
+        <div class="venue-address copy">
+          <b>Hospital de Clínicas da UNICAMP (HC)</b>
+          Rua Vital Brasil, 251<br>
+          Cidade Universitária · Campinas, São Paulo<br>
+          13083-888 · Brazil
+        </div>
+        <div class="map-actions">
+          <a class="btn primary" href="https://share.google/H8udi9lEeJgjZzazJ" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
+        </div>
+        <p><strong>Workshop format and registration details will be announced.</strong></p>
+      </div>
+    </div>
+    <div class="venue-map" aria-label="Map showing Hospital de Clínicas da UNICAMP">
+      <iframe
+        title="Hospital de Clínicas da UNICAMP — hands-on MRI workshop venue"
+        src="https://www.google.com/maps?q=Hospital%20de%20Cl%C3%ADnicas%20da%20UNICAMP%2C%20Rua%20Vital%20Brasil%2C%20251%2C%20Campinas%2C%20SP%2C%20Brazil&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+</section>'''
+          if old not in s:
+              raise SystemExit('Expected workshop block not found')
+          p.write_text(s.replace(old, new), encoding='utf-8')
+          PY
+
+      - name: Commit updated workshop location
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Add HC UNICAMP workshop location and map"
+          git push
