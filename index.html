@@ -15,6 +15,7 @@
       --primary-dark: #075a69;
       --accent: #dff3f5;
       --white: #fff;
+      --gold: #f0a202;
       --max: 1180px;
     }
     * { box-sizing: border-box; }
@@ -22,14 +23,15 @@
     body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: var(--ink); background: var(--white); line-height: 1.55; }
     a { color: inherit; }
     .container { width: min(calc(100% - 40px), var(--max)); margin: auto; }
+
     header { position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,.97); border-bottom: 1px solid var(--line); }
     .nav-wrap { min-height: 74px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-    .brand { text-decoration: none; font-weight: 800; line-height: 1.05; letter-spacing: -.02em; }
+    .brand { text-decoration: none; font-weight: 800; line-height: 1.05; letter-spacing: -.02em; flex: 0 0 auto; }
     .brand small { display:block; color: var(--primary); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 3px; }
-    nav { display: flex; gap: 24px; align-items: center; }
-    nav a { text-decoration: none; font-size: 14px; font-weight: 700; }
+    nav { display: flex; gap: 14px; align-items: center; }
+    nav a { text-decoration: none; font-size: 13px; font-weight: 700; white-space: nowrap; }
     nav a:hover { color: var(--primary); }
-    .menu { display:none; border:0; background:none; font-size:25px; }
+    .menu { display:none; border:0; background:none; font-size:25px; cursor:pointer; }
 
     .hero { padding: 88px 0 76px; background: linear-gradient(135deg,#f8fcfd 0%,#ffffff 56%,#eaf7f8 100%); border-bottom: 1px solid var(--line); }
     .hero-grid { display:grid; grid-template-columns: 1.35fr .8fr; gap: 74px; align-items:center; }
@@ -46,19 +48,21 @@
     .btn.primary { background: var(--primary); color:white; }
     .btn.primary:hover { background:var(--primary-dark); }
     .btn.secondary { border:1px solid var(--line); background:white; }
-    .btn.interest { background:#f0a202; color:#14213d; border:1px solid #f0a202; box-shadow:0 8px 22px rgba(240,162,2,.22); }
+    .btn.disabled { border:1px solid var(--line); background:#f1f4f6; color:#7c8995; cursor:default; }
+    .btn.interest { background:var(--gold); color:#14213d; border:1px solid var(--gold); box-shadow:0 8px 22px rgba(240,162,2,.22); }
     .btn.interest:hover { background:#d99100; border-color:#d99100; }
+    .hero-card { background:white; border:1px solid var(--line); border-top:5px solid var(--primary); padding:26px; box-shadow:0 18px 45px rgba(20,33,61,.07); }
+    .hero-card h3 { margin:0 0 16px; font-size:17px; }
+    .hero-card ol { margin:0; padding-left:22px; }
+    .hero-card li { padding:7px 0; border-bottom:1px solid #edf2f5; }
+    .hero-card li:last-child { border-bottom:0; }
+
     .interest-band { padding:26px 0; background:var(--ink); color:#fff; }
     .interest-wrap { display:flex; align-items:center; justify-content:space-between; gap:28px; }
     .interest-band .kicker { color:#9de2e7; margin-bottom:5px; }
     .interest-band h2 { font-family:Georgia, 'Times New Roman', serif; font-size:clamp(25px,3vw,36px); margin:0 0 5px; letter-spacing:-.025em; }
     .interest-band p { margin:0; color:#d8e1e8; }
     .interest-band .btn { flex:0 0 auto; }
-    .hero-card { background:white; border:1px solid var(--line); border-top:5px solid var(--primary); padding:26px; box-shadow:0 18px 45px rgba(20,33,61,.07); }
-    .hero-card h3 { margin:0 0 16px; font-size:17px; }
-    .hero-card ol { margin:0; padding-left:22px; }
-    .hero-card li { padding:7px 0; border-bottom:1px solid #edf2f5; }
-    .hero-card li:last-child { border-bottom:0; }
 
     section { padding: 80px 0; }
     .soft { background: var(--soft); }
@@ -68,6 +72,13 @@
     .copy p:first-child { margin-top:0; }
     .heading { max-width: 860px; margin-bottom: 40px; }
 
+    .important-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    .date-card { border:1px solid var(--line); background:#fff; padding:22px; min-height:155px; display:flex; flex-direction:column; }
+    .date-card .status { display:inline-flex; align-self:flex-start; padding:4px 8px; border-radius:999px; background:var(--accent); color:var(--primary-dark); font-size:10px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; margin-bottom:14px; }
+    .date-card .status.open { background:#fff0c7; color:#875c00; }
+    .date-card strong { font-size:17px; margin-bottom:6px; }
+    .date-card span:last-child { color:var(--muted); font-size:14px; margin-top:auto; }
+
     .speaker-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
     .speaker { background:#fff; border:1px solid var(--line); overflow:hidden; display:flex; flex-direction:column; }
     .speaker-photo { width:100%; aspect-ratio: 4 / 4.2; object-fit: cover; object-position: center top; background:#eef3f6; }
@@ -75,7 +86,6 @@
     .speaker h3 { margin:0 0 7px; font-size:21px; line-height:1.16; }
     .speaker p { margin:0 0 16px; color:var(--muted); font-size:14px; }
     .speaker span { margin-top:auto; font-size:13px; color:var(--primary); font-weight:700; line-height:1.35; }
-    .note { color:var(--muted); font-size:14px; margin-top:22px; }
 
     .tabs { display:grid; grid-template-columns:repeat(3,1fr); border:1px solid var(--line); margin-bottom:28px; }
     .tab { border:0; border-right:1px solid var(--line); background:#fff; padding:18px; text-align:left; font:inherit; font-weight:800; cursor:pointer; }
@@ -94,6 +104,11 @@
     .row span { color:var(--muted); font-size:14px; }
     .row.featured { background:#edf7f8; }
     .row.social { background:#fbf7ed; }
+
+    .coming-panel { border:1px solid var(--line); background:#fff; padding:30px; }
+    .coming-panel h3 { font-family:Georgia,serif; font-size:26px; margin:0 0 10px; }
+    .coming-panel p { color:var(--muted); margin:0 0 20px; }
+    .coming-panel .meta { display:block; color:var(--primary); font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; margin-bottom:8px; }
 
     .workshop { background:var(--accent); }
     .venue-grid { display:grid; grid-template-columns:1.15fr .85fr; gap:68px; align-items:center; }
@@ -125,18 +140,21 @@
     footer { background:var(--ink); color:#fff; padding:34px 0; }
     .footer-wrap { display:flex; justify-content:space-between; gap:28px; align-items:center; }
     footer span { display:block; color:#c7d1db; font-size:13px; }
-    .footer-links { display:flex; gap:18px; }
+    .footer-links { display:flex; gap:16px; flex-wrap:wrap; }
     .footer-links a { text-decoration:none; font-size:13px; color:#d9e0e6; }
 
+    @media(max-width:1120px){
+      nav { display:none; position:absolute; top:74px; left:0; right:0; background:#fff; border-bottom:1px solid var(--line); padding:20px; flex-direction:column; align-items:flex-start; gap:16px; }
+      nav.open { display:flex; }
+      .menu { display:block; }
+    }
     @media(max-width:980px){
       .speaker-grid { grid-template-columns: repeat(2,1fr); }
       .steering-grid { grid-template-columns:repeat(3,1fr); }
+      .important-grid { grid-template-columns:repeat(2,1fr); }
       .hero-grid, .split, .venue-grid { grid-template-columns:1fr; gap:42px; }
     }
     @media(max-width:760px){
-      nav { display:none; position:absolute; top:74px; left:0; right:0; background:#fff; border-bottom:1px solid var(--line); padding:20px; flex-direction:column; align-items:flex-start; }
-      nav.open { display:flex; }
-      .menu { display:block; }
       .tabs { grid-template-columns:1fr; }
       .tab { border-right:0; border-bottom:1px solid var(--line); }
       .tab:last-child { border-bottom:0; }
@@ -145,6 +163,7 @@
       .footer-wrap { flex-direction:column; align-items:flex-start; }
       .interest-wrap { flex-direction:column; align-items:flex-start; }
       .sponsor-grid { grid-template-columns:1fr; }
+      .important-grid { grid-template-columns:1fr; }
     }
     @media(max-width:560px){
       .container { width:min(calc(100% - 28px), var(--max)); }
@@ -163,12 +182,16 @@
       <a href="#about">About</a>
       <a href="#speakers">Speakers</a>
       <a href="#program">Program</a>
+      <a href="#abstracts">Abstracts</a>
+      <a href="#registration">Registration</a>
       <a href="#workshop">Workshop</a>
+      <a href="#travel">Travel</a>
       <a href="#venue">Venue</a>
-      <a href="#sponsorship">Sponsorship</a>
+      <a href="#sponsorship">Sponsors</a>
     </nav>
   </div>
 </header>
+
 <main>
 <section id="home" class="hero">
   <div class="container hero-grid">
@@ -211,7 +234,38 @@
   </div>
 </section>
 
-<section id="about">
+<section id="dates">
+  <div class="container">
+    <div class="heading">
+      <p class="kicker">Plan ahead</p>
+      <h2>Important Dates</h2>
+    </div>
+    <div class="important-grid">
+      <article class="date-card">
+        <span class="status open">Open now</span>
+        <strong>Expression of Interest</strong>
+        <span>Tell us you are interested in joining the symposium in Campinas.</span>
+      </article>
+      <article class="date-card">
+        <span class="status">Opening soon</span>
+        <strong>Abstract Submission</strong>
+        <span>Submission guidelines and deadlines will be announced.</span>
+      </article>
+      <article class="date-card">
+        <span class="status">Opening soon</span>
+        <strong>Registration</strong>
+        <span>Registration categories, fees and workshop options will be announced.</span>
+      </article>
+      <article class="date-card">
+        <span class="status">Save the date</span>
+        <strong>April 14–16, 2027</strong>
+        <span>Cerebellum Neuroimaging Symposium · Campinas, Brazil.</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="soft">
   <div class="container split">
     <div>
       <p class="kicker">About</p>
@@ -224,7 +278,7 @@
   </div>
 </section>
 
-<section id="speakers" class="soft">
+<section id="speakers">
   <div class="container">
     <div class="heading">
       <p class="kicker">Confirmed keynote speakers</p>
@@ -259,7 +313,7 @@
   </div>
 </section>
 
-<section id="program">
+<section id="program" class="soft">
   <div class="container">
     <div class="heading">
       <p class="kicker">Preliminary scientific program</p>
@@ -329,6 +383,36 @@
   </div>
 </section>
 
+<section id="abstracts">
+  <div class="container split">
+    <div>
+      <p class="kicker">Scientific contributions</p>
+      <h2>Abstract Submission</h2>
+    </div>
+    <div class="coming-panel">
+      <span class="meta">Opening soon</span>
+      <h3>Share your work with the cerebellar imaging community.</h3>
+      <p>Submission guidelines, deadlines, presentation formats and review criteria will be published here. Abstracts will be invited across the six scientific themes of the symposium, with selected contributions considered for oral and poster presentation.</p>
+      <span class="btn disabled" aria-disabled="true">Abstract submission · Opening soon</span>
+    </div>
+  </div>
+</section>
+
+<section id="registration" class="soft">
+  <div class="container split">
+    <div>
+      <p class="kicker">Join us in Campinas</p>
+      <h2>Registration</h2>
+    </div>
+    <div class="coming-panel">
+      <span class="meta">Opening soon</span>
+      <h3>Registration details will be announced here.</h3>
+      <p>Registration categories, fees, eligibility information and participation options will be published when online registration opens. Information about participation in the hands-on MRI workshop will be included at the same time.</p>
+      <span class="btn disabled" aria-disabled="true">Registration · Opening soon</span>
+    </div>
+  </div>
+</section>
+
 <section id="workshop" class="workshop">
   <div class="container">
     <div class="split">
@@ -362,11 +446,27 @@
     </div>
   </div>
 </section>
-<section id="venue">
+
+<section id="travel">
+  <div class="container split">
+    <div>
+      <p class="kicker">Getting to Campinas</p>
+      <h2>Travel &amp; Accommodation</h2>
+    </div>
+    <div class="coming-panel">
+      <span class="meta">Coming soon</span>
+      <h3>Practical information for your visit.</h3>
+      <p>Travel guidance will be added as the meeting approaches, including recommended accommodation, airport information, local transportation and practical information for international visitors.</p>
+      <span class="btn disabled" aria-disabled="true">Travel guide · Coming soon</span>
+    </div>
+  </div>
+</section>
+
+<section id="venue" class="soft">
   <div class="container">
     <div class="venue-grid">
       <div>
-        <p class="kicker">Venue</p>
+        <p class="kicker">Main symposium venue</p>
         <h2>IOU · University of Campinas<br>Campinas, Brazil</h2>
         <p class="copy">The symposium will take place at the <strong>Institute of Otorhinolaryngology &amp; Head and Neck Surgery (IOU)</strong>, located on the main campus of the University of Campinas (UNICAMP) in Barão Geraldo.</p>
         <div class="venue-address copy">
@@ -398,7 +498,7 @@
   </div>
 </section>
 
-<section class="soft" id="committee">
+<section id="committee">
   <div class="container">
     <div class="heading">
       <p class="kicker">Scientific leadership</p>
@@ -434,7 +534,7 @@
   </div>
 </section>
 
-<section id="sponsorship">
+<section id="sponsorship" class="soft">
   <div class="container sponsor-section">
     <p class="kicker">Sponsors &amp; partners</p>
     <h2>Confirmed sponsors</h2>
@@ -453,24 +553,34 @@
   </div>
 </section>
 
-<section class="soft" id="updates">
+<section id="updates">
   <div class="container split">
     <div>
-      <p class="kicker">Coming soon</p>
-      <h2>Registration, abstracts and travel information.</h2>
+      <p class="kicker">Stay informed</p>
+      <h2>Be the first to hear about registration and abstracts.</h2>
     </div>
     <div class="copy">
-      <p>This website will be updated as registration information, abstract deadlines, additional speakers, sponsors and detailed travel guidance are confirmed.</p>
+      <p>Registration and abstract submission are not open yet. In the meantime, let us know you are interested in attending the Cerebellum Neuroimaging Symposium 2027.</p>
+      <a class="btn interest" href="https://forms.gle/rCNTC6VUyXUfFH4u8" target="_blank" rel="noopener noreferrer">Expression of Interest</a>
     </div>
   </div>
 </section>
 </main>
+
 <footer>
   <div class="container footer-wrap">
     <div><strong>Cerebellum Neuroimaging Symposium 2027</strong><span>April 14–16, 2027 · Campinas, Brazil</span></div>
-    <div class="footer-links"><a href="#speakers">Speakers</a><a href="#program">Program</a><a href="#venue">Venue</a></div>
+    <div class="footer-links">
+      <a href="#speakers">Speakers</a>
+      <a href="#program">Program</a>
+      <a href="#abstracts">Abstracts</a>
+      <a href="#registration">Registration</a>
+      <a href="#travel">Travel</a>
+      <a href="#venue">Venue</a>
+    </div>
   </div>
 </footer>
+
 <script>
 const tabs=document.querySelectorAll('.tab'),programs=document.querySelectorAll('.program');
 tabs.forEach(tab=>tab.addEventListener('click',()=>{tabs.forEach(t=>t.classList.remove('active'));programs.forEach(p=>p.classList.remove('active'));tab.classList.add('active');document.getElementById(tab.dataset.target).classList.add('active')}));
