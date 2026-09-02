@@ -110,7 +110,8 @@
     .steering-member { text-align:center; padding:4px; }
     .steering-photo { width:112px; height:112px; border-radius:50%; object-fit:cover; object-position:center top; display:block; margin:0 auto 14px; border:3px solid #fff; box-shadow:0 0 0 1px var(--line), 0 7px 18px rgba(20,33,61,.06); background:#eef3f6; }
     .steering-member strong { display:block; font-size:15px; line-height:1.25; }
-    .steering-member span { display:block; color:var(--muted); font-size:12px; line-height:1.35; margin-top:6px; }
+    .role-tag { display:inline-block; margin-left:6px; padding:2px 6px; border-radius:999px; background:var(--accent); color:var(--primary-dark); font-size:9px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; vertical-align:middle; }
+    .steering-member span:not(.role-tag) { display:block; color:var(--muted); font-size:12px; line-height:1.35; margin-top:6px; }
 
     .sponsor-section { text-align:center; }
     .sponsor-intro { color: var(--muted); font-size: 17px; max-width: 760px; margin: 18px auto 28px; }
@@ -406,12 +407,12 @@
     <div class="steering-grid">
       <article class="steering-member">
         <img class="steering-photo" src="assets/thiago-rezende.jpg" alt="Portrait of Thiago Junqueira Ribeiro de Rezende">
-        <strong>Thiago Junqueira Ribeiro de Rezende</strong>
+        <strong>Thiago Junqueira Ribeiro de Rezende <span class="role-tag">Co-Chair</span></strong>
         <span>University of São Paulo &amp; University of Campinas, Brazil</span>
       </article>
       <article class="steering-member">
         <img class="steering-photo" src="assets/ian-harding.jpg" alt="Portrait of Ian H. Harding">
-        <strong>Ian H. Harding</strong>
+        <strong>Ian H. Harding <span class="role-tag">Co-Chair</span></strong>
         <span>Queensland Institute of Medical Research, Australia</span>
       </article>
       <article class="steering-member">
