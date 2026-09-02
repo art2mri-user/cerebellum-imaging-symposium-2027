@@ -16,6 +16,10 @@ The website currently includes:
 - preliminary program
 - confirmed sponsors: **Friedreich's Ataxia Research Alliance (FARA)** and **Ataxia Global Initiative (AGI)**
 - updated program with **Torgeir Moberget** replacing **Peter Bede**
+- main symposium venue at **IOU, University of Campinas**
+- hands-on MRI workshop venue at **Hospital de Clínicas da UNICAMP (HC)**
+- highlighted **Expression of Interest** form
+- Steering Committee with member photos
 
 ## Repository structure
 
