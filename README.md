@@ -6,7 +6,7 @@ Official website repository for the **Cerebellum Neuroimaging Symposium 2027**, 
 
 Access the public site here:
 
-**https://art2mri-user.github.io/cerebellum-neuroimaging-symposium-2027/**
+**https://art2mri.github.io/cerebellum-neuroimaging-symposium-2027/**
 
 ## Current website contents
 
